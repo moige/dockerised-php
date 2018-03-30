@@ -41,3 +41,39 @@ RUN apt-get update \
     --with-jpeg-dir=/usr/lib \
     --with-freetype-dir=/usr/include/freetype2 && \
     docker-php-ext-install gd
+    
+#####################################
+# pgsql
+#####################################
+
+ARG INSTALL_PGSQL=false
+RUN if [ ${INSTALL_PGSQL} = true ]; then \
+    # Install the pgsql extension
+    apt-get update -yqq && \
+    docker-php-ext-install pgsql \
+;fi
+
+#####################################
+# pgsql client
+#####################################
+
+ARG INSTALL_PG_CLIENT=false
+RUN if [ ${INSTALL_PG_CLIENT} = true ]; then \
+    # Create folders if not exists (https://github.com/tianon/docker-brew-debian/issues/65)
+    mkdir -p /usr/share/man/man1 && \
+    mkdir -p /usr/share/man/man7 && \
+    # Install the pgsql client
+    apt-get update -yqq && \
+    apt-get install -y postgresql-client \
+;fi
+
+ADD ./laravel.ini /usr/local/etc/php/conf.d
+ADD ./xlaravel.pool.conf /usr/local/etc/php-fpm.d/
+
+RUN usermod -u 1000 www-data
+
+WORKDIR /var/www
+
+CMD ["php-fpm"]
+
+EXPOSE 9000
