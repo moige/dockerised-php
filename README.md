@@ -1,4 +1,4 @@
-Plantilla para aplicaciones PHP usando PHP7-FPM y Nginx
+Plantilla para aplicaciones PHP usando PHP7-FPM, Nginx y MySQL.
 
 ## Instrucciones
 1. Clonar el repositorio
